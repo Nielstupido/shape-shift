@@ -2,25 +2,19 @@ using UnityEngine;
 
 public class ShapeMovement : MonoBehaviour
 {
-    private float speed = 250f;
+    private float speedRate = 60f;
+    private float speed;
     private Rigidbody2D rb;
-    private Vector2 shapeVelocity;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    public void MoveShape(Vector2 direction)
+    public void MoveShape(Vector2 direction, float joystickDistance)
     {
-        if(direction != Vector2.zero)
-        {
-            shapeVelocity = direction;
-            rb.velocity = shapeVelocity * speed * Time.fixedDeltaTime;
-        }
-        else
-        {
-            rb.velocity = Vector2.zero;
-        }
+        joystickDistance *= 5f;
+        speed = speedRate * joystickDistance;
+        rb.velocity = direction * speed * Time.fixedDeltaTime;
     }
 }

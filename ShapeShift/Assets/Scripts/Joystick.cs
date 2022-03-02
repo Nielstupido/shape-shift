@@ -15,6 +15,7 @@ public class Joystick : MonoBehaviour
     private Vector3 mousePos;
     private float joystickRad;
     private float joystickDistance;
+    private float joystickMag;
     private PointerEventData pointerEventData;
 
     void Start()
@@ -22,15 +23,12 @@ public class Joystick : MonoBehaviour
         shapeMovement = FindObjectOfType<ShapeMovement>();
 
         joysstickOrigPos = joystickOuter.transform.position;
-        joystickRad = joystickOuter.GetComponent<RectTransform>().sizeDelta.y / 300;
+        joystickRad = joystickOuter.GetComponent<RectTransform>().sizeDelta.y / 900;
     }
 
     void Update()
     {
-        if(joystickVector != Vector2.zero)
-        {
-            shapeMovement.MoveShape(joystickVector);
-        }
+        shapeMovement.MoveShape(joystickVector, joystickMag);
     }
 
     public void PointerDown()
@@ -64,11 +62,12 @@ public class Joystick : MonoBehaviour
         {
             joystickInner.transform.position = joystickTouchPos + joystickVector * joystickRad;
         }
+
+        joystickMag = Vector2.Distance(joystickOuter.transform.position, joystickInner.transform.position);
     }
 
     public void PointerUp()
     {
-        joystickVector = Vector2.zero;
         joystickInner.transform.position = joysstickOrigPos;
         joystickOuter.transform.position = joysstickOrigPos;
     }

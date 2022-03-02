@@ -4,19 +4,34 @@ public class PlayerHit : MonoBehaviour
 {
     private PlayerStats playerStats;
     private ShiftShape shiftShape;
+    private CamShake camShake;
+    private int enemyShapeNum;
+
+    public int EnemyShapeNum { set{enemyShapeNum = value;} }
 
     void Start()
     {
         playerStats = FindObjectOfType<PlayerStats>();
         shiftShape = FindObjectOfType<ShiftShape>();
+        camShake = FindObjectOfType<CamShake>();
     } 
   
-    void OnTriggerEnter2D(Collider2D collider)
+    void OnCollisionEnter2D(Collision2D collider)
     {
-        if (collider.gameObject.name.Equals("Shape") && shiftShape.CurrentShape == )
+        if (collider.gameObject.name.Equals("Shape"))
         {
-            playerStats.Health -= 10;
-            Destroy(gameObject);
+            if (shiftShape.CurrentShape == enemyShapeNum)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                camShake.gameObject.SetActive(true);
+                playerStats.Health -= 10;
+                Destroy(gameObject);
+                camShake.gameObject.SetActive(false);
+            }
+
         }
     }
 }
