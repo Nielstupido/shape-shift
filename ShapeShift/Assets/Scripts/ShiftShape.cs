@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class ShiftShape : MonoBehaviour
 {
     [SerializeField]private List<Sprite> shapes;
-    private int maxAvailableShapes = 3, currentShape = 0;
+    private int currentShape = 0;
 
     public int CurrentShape {get {return currentShape;}}
 
@@ -18,7 +18,7 @@ public class ShiftShape : MonoBehaviour
 
     public void Shift()
     {
-        if(maxAvailableShapes == currentShape + 1 || shapes.Count == currentShape + 1)
+        if(shapes.Count == currentShape + 1)
         {
             currentShape = -1;
         }

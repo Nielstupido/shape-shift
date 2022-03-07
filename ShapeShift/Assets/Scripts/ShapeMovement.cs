@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ShapeMovement : MonoBehaviour
 {
-    private float speedRate = 60f;
+    private float speedRate = 1f;
     private float speed;
     private Rigidbody2D rb;
 

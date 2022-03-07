@@ -29,7 +29,7 @@ public class PlayerHit : MonoBehaviour
                 camShake.gameObject.SetActive(true);
                 playerStats.Health -= 10;
                 Destroy(gameObject);
-                camShake.gameObject.SetActive(false);
+                camShake.TriggerShake();
             }
 
         }

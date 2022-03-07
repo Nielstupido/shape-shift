@@ -2,38 +2,42 @@ using UnityEngine;
 
 public class CamShake : MonoBehaviour
 {
-	[SerializeField]private Transform camTransform;
-	[SerializeField]private float shakeDuration = 0.5f;
-	[SerializeField]private float shakeAmount = 0.7f;
-	[SerializeField]private float decreaseFactor = 1.0f;
+		// Transform of the GameObject you want to shake
+	[SerializeField]private Transform cameraObject;
+
+		// The initial position of the GameObject
+	private Vector3 initialPosition;
 	
-	private Vector3 originalPos;
+	// Desired duration of the shake effect
+	private float shakeDuration = 0f;
 	
-	void Awake()
+	// A measure of magnitude for the shake. Tweak based on your preference
+	private float shakeMagnitude = 0.3f;
+	
+	// A measure of how quickly the shake effect should evaporate
+	private float dampingSpeed = 1.0f;
+	
+	void Start()
 	{
-		if (camTransform == null)
-		{
-			camTransform = GetComponent(typeof(Transform)) as Transform;
-		}
-	}
-	
-	void OnEnable()
-	{
-		originalPos = camTransform.localPosition;
+		initialPosition = cameraObject.localPosition;
 	}
 
 	void Update()
 	{
 		if (shakeDuration > 0)
 		{
-			camTransform.localPosition = originalPos + Random.insideUnitSphere * shakeAmount;
-			
-			shakeDuration -= Time.deltaTime * decreaseFactor;
+			cameraObject.localPosition = initialPosition + Random.insideUnitSphere * shakeMagnitude;
+			shakeDuration -= Time.deltaTime * dampingSpeed;
 		}
 		else
 		{
 			shakeDuration = 0f;
-			camTransform.localPosition = originalPos;
+			cameraObject.localPosition = initialPosition;
 		}
+	}
+
+	public void TriggerShake() 
+	{
+		shakeDuration = 0.5f;
 	}
 }

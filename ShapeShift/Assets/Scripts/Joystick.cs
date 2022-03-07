@@ -21,34 +21,29 @@ public class Joystick : MonoBehaviour
     void Start()
     {
         shapeMovement = FindObjectOfType<ShapeMovement>();
+        joystickVector = Vector2.zero;
 
         joysstickOrigPos = joystickOuter.transform.position;
-        joystickRad = joystickOuter.GetComponent<RectTransform>().sizeDelta.y / 900;
+        joystickRad = joystickOuter.GetComponent<RectTransform>().sizeDelta.y / 4;
     }
 
     void Update()
     {
+        if(joystickVector != Vector2.zero)
         shapeMovement.MoveShape(joystickVector, joystickMag);
     }
 
     public void PointerDown()
     {
-        mousePos = Input.mousePosition;
-        mousePos.z = Camera.main.nearClipPlane;
-        mouseWorldPosition = Camera.main.ScreenToWorldPoint(mousePos);
-
-        joystickInner.transform.position= mouseWorldPosition;
-        joystickOuter.transform.position = mouseWorldPosition;
-        joystickTouchPos = mouseWorldPosition;
+        joystickInner.transform.position= Input.mousePosition;
+        joystickOuter.transform.position = Input.mousePosition;
+        joystickTouchPos = Input.mousePosition;
     }
 
     public void Drag(BaseEventData baseEventData)
     {
         pointerEventData = baseEventData as PointerEventData;
-        pointerWorldPosition = Camera.main.ScreenToWorldPoint(pointerEventData.position);
-
-        dragPos.x = pointerWorldPosition.x;
-        dragPos.y = pointerWorldPosition.y;
+        dragPos = pointerEventData.position;
 
         joystickVector = (dragPos - joystickTouchPos).normalized;
 
