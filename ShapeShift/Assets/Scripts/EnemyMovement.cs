@@ -3,7 +3,7 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour
 {
     private ShapeMovement player;
-    private float enemySpeed = 1f;
+    private float enemySpeed = 2f;
 
     void Start()
     {

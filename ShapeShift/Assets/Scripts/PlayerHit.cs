@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerHit : MonoBehaviour
 {
+    [SerializeField]private ParticleSystem explosion;
     private PlayerStats playerStats;
     private ShiftShape shiftShape;
     private CamShake camShake;
@@ -15,7 +16,7 @@ public class PlayerHit : MonoBehaviour
         shiftShape = FindObjectOfType<ShiftShape>();
         camShake = FindObjectOfType<CamShake>();
     } 
-  
+
     void OnCollisionEnter2D(Collision2D collider)
     {
         if (collider.gameObject.name.Equals("Shape"))
@@ -26,10 +27,14 @@ public class PlayerHit : MonoBehaviour
             }
             else
             {
-                camShake.gameObject.SetActive(true);
+                GetComponent<BoxCollider2D>().enabled = false;
+                GetComponent<SpriteRenderer>().enabled = false;
+
+                explosion.Play();
+
                 playerStats.Health -= 10;
-                Destroy(gameObject);
                 camShake.TriggerShake();
+                Destroy(gameObject, 0.5f);
             }
 
         }

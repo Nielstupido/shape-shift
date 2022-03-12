@@ -8,12 +8,20 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]private GameObject enemy;
     private int maxAvailShapes = 3;
     private int enemyShapeNum, randomNum;
-    private float gameRunningFor;
+    private int lastShape, numberOfOccurrences;
+    private float spawnSpeed, difficultyLastFor, difficultyLastForX;
     private Vector3 spawnLoc;
+    private bool isGameOver, isGoodToProceed;
+
+    public bool IsGameOVer {set{isGameOver = value;}}
     
     void Start()
     {
-        gameRunningFor = 3f;
+        numberOfOccurrences = 0;
+        isGoodToProceed = false;
+        isGameOver = false;
+        spawnSpeed = 3f;
+        difficultyLastFor = 1f;
 
         StartCoroutine("GameDifficulty");
     }
@@ -23,7 +31,14 @@ public class EnemySpawner : MonoBehaviour
         GetRandomLoc();
         spawnLoc = Camera.main.ViewportToWorldPoint(spawnLoc);
         GameObject newEnemy = Instantiate(enemy, spawnLoc, Quaternion.identity);
-        enemyShapeNum = Random.Range(0, maxAvailShapes);
+        
+        while(!isGoodToProceed)
+        {
+            enemyShapeNum = Random.Range(0, maxAvailShapes);
+            CheckContinualIdentical();
+        }
+
+        isGoodToProceed = false;
         newEnemy.GetComponent<SpriteRenderer>().sprite = shapes[enemyShapeNum];
         newEnemy.GetComponent<PlayerHit>().EnemyShapeNum = enemyShapeNum;
     }
@@ -56,20 +71,50 @@ public class EnemySpawner : MonoBehaviour
         spawnLoc.z = 2f;
     }
 
+    void CheckContinualIdentical()
+    {
+        if(lastShape == enemyShapeNum)
+            numberOfOccurrences++;
+        else
+        {
+            lastShape = enemyShapeNum;
+            numberOfOccurrences = 1;
+        }
+
+        if(numberOfOccurrences >= 3)
+            isGoodToProceed = false;
+        else
+            isGoodToProceed = true;
+    }
+
     IEnumerator GameDifficulty()
     {
-        while(gameRunningFor > 0)
+        while(!isGameOver)
         {
-            SpawnEnemy();
-        
-            if(gameRunningFor <= 0.5f)
-                gameRunningFor -= 0.1f;
-            else
-                gameRunningFor -= 0.2f;
+            difficultyLastForX = difficultyLastFor;
 
-            Debug.Log(gameRunningFor);
+            while(difficultyLastForX > 0)
+            {
+                SpawnEnemy();
 
-            yield return new WaitForSeconds(gameRunningFor);
+                yield return new WaitForSeconds(spawnSpeed);
+                difficultyLastForX -= 0.5f;
+            }
+
+            if(spawnSpeed >= 0.5f)
+            {
+                if(spawnSpeed <= 1f)
+                    spawnSpeed -= 0.02f;
+                else if(spawnSpeed <= 1.5f)
+                    spawnSpeed -= 0.05f;
+                else
+                    spawnSpeed -= 0.1f;
+            }
+            Debug.Log(spawnSpeed);
+            Debug.Log(difficultyLastFor);
+
+            if(difficultyLastFor <= 10f)
+                difficultyLastFor += 0.05f;
         }
     }
 }
