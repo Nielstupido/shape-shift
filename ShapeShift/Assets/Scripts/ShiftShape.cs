@@ -5,8 +5,10 @@ public class ShiftShape : MonoBehaviour
 {
     [SerializeField]private List<Sprite> shapes;
     private int currentShape = 0;
+    private int shapesNum = 2;
 
     public int CurrentShape {get {return currentShape;}}
+    public int ShapesNum {set {shapesNum += value; Debug.Log(shapesNum);}}
 
     void Update()
     {
@@ -18,7 +20,7 @@ public class ShiftShape : MonoBehaviour
 
     public void Shift()
     {
-        if(shapes.Count == currentShape + 1)
+        if(shapesNum == currentShape + 1)
         {
             currentShape = -1;
         }

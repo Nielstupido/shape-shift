@@ -6,14 +6,16 @@ public class EnemySpawner : MonoBehaviour
 {
     [SerializeField]private List<Sprite> shapes;
     [SerializeField]private GameObject enemy;
-    private int maxAvailShapes = 3;
+    private int maxAvailShapes = 2;
     private int enemyShapeNum, randomNum;
     private int lastShape, numberOfOccurrences;
+    private float enemySpeed;
     private float spawnSpeed, difficultyLastFor, difficultyLastForX;
     private Vector3 spawnLoc;
     private bool isGameOver, isGoodToProceed;
 
     public bool IsGameOVer {set{isGameOver = value;}}
+    public int MaxAvailEnemyShapes {set{maxAvailShapes += value;}}
     
     void Start()
     {
@@ -26,7 +28,7 @@ public class EnemySpawner : MonoBehaviour
         StartCoroutine("GameDifficulty");
     }
 
-    void SpawnEnemy()
+    void SpawnEnemy(float speed)
     {
         GetRandomLoc();
         spawnLoc = Camera.main.ViewportToWorldPoint(spawnLoc);
@@ -41,6 +43,7 @@ public class EnemySpawner : MonoBehaviour
         isGoodToProceed = false;
         newEnemy.GetComponent<SpriteRenderer>().sprite = shapes[enemyShapeNum];
         newEnemy.GetComponent<PlayerHit>().EnemyShapeNum = enemyShapeNum;
+        newEnemy.GetComponent<EnemyMovement>().EnemySpeed = speed;
     }
 
     void GetRandomLoc()
@@ -95,7 +98,16 @@ public class EnemySpawner : MonoBehaviour
 
             while(difficultyLastForX > 0)
             {
-                SpawnEnemy();
+                if(spawnSpeed >= 1)
+                {
+                    enemySpeed = Random.Range(1.8f, 2.0f);
+                }
+                else
+                {
+                    enemySpeed = Random.Range(1.0f, 2.0f);
+                }
+
+                SpawnEnemy(enemySpeed);
 
                 yield return new WaitForSeconds(spawnSpeed);
                 difficultyLastForX -= 0.5f;
@@ -108,10 +120,9 @@ public class EnemySpawner : MonoBehaviour
                 else if(spawnSpeed <= 1.5f)
                     spawnSpeed -= 0.05f;
                 else
-                    spawnSpeed -= 0.1f;
+                    spawnSpeed -= 0.2f;
             }
-            Debug.Log(spawnSpeed);
-            Debug.Log(difficultyLastFor);
+
 
             if(difficultyLastFor <= 10f)
                 difficultyLastFor += 0.05f;
