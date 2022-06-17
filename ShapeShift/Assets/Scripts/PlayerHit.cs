@@ -23,6 +23,7 @@ public class PlayerHit : MonoBehaviour
         {
             if (shiftShape.CurrentShape == enemyShapeNum)
             {
+                Score.AddScore();
                 Destroy(gameObject);
             }
             else

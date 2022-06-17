@@ -100,11 +100,11 @@ public class EnemySpawner : MonoBehaviour
             {
                 if(spawnSpeed >= 1)
                 {
-                    enemySpeed = Random.Range(1.8f, 2.0f);
+                    enemySpeed = Random.Range(2, 4);
                 }
                 else
                 {
-                    enemySpeed = Random.Range(1.0f, 2.0f);
+                    enemySpeed = Random.Range(4f, 6f);
                 }
 
                 SpawnEnemy(enemySpeed);

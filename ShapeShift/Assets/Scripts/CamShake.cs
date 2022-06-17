@@ -1,4 +1,4 @@
-using UnityEngine;
+ using UnityEngine;
 
 public class CamShake : MonoBehaviour
 {
@@ -7,7 +7,7 @@ public class CamShake : MonoBehaviour
 	private float shakeDuration = 0f;
 	private float shakeMagnitude = 0.3f;
 	private float dampingSpeed = 1.0f;
-	
+
 	void Start()
 	{
 		initialPosition = cameraObject.localPosition;
