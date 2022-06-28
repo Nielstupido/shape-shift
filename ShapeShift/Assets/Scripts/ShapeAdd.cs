@@ -6,7 +6,7 @@ public class ShapeAdd : MonoBehaviour
     [SerializeField]private GameObject text;
     private ShiftShape shiftShape;
     private EnemySpawner enemySpawner;
-    private int counter, counterBreakpoint, shapesAdded;
+    private int counter, counterBreakpoint, shapesAdded, shapeBannerTimer;
     private bool isAddingShapesDone;
 
     void Start()
@@ -16,6 +16,7 @@ public class ShapeAdd : MonoBehaviour
         counter = 0;
         shapesAdded = 0;
         counterBreakpoint = 30;
+        shapeBannerTimer = 0;
         isAddingShapesDone = false;
         StartCoroutine("CountdownAddingShape");
     }
@@ -33,7 +34,12 @@ public class ShapeAdd : MonoBehaviour
         {
             if(text.activeSelf)
             {
-                text.SetActive(false);
+                shapeBannerTimer++;
+                if(shapeBannerTimer == 3)
+                {
+                    text.SetActive(false);
+                    shapeBannerTimer = 0;
+                }
             }
 
             if(counter == counterBreakpoint)

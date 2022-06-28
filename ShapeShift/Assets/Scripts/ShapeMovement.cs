@@ -33,7 +33,18 @@ public class ShapeMovement : MonoBehaviour
 
     public void MoveShape(Vector2 direction, float joystickDistance)
     {
-        joystickDistance *= 5f;
+        if(joystickDistance > 55)
+        {
+            joystickDistance *= 5f;
+        }
+        else if(joystickDistance > 35)
+        {
+            joystickDistance *= 4f;
+        }
+        else
+        {
+            joystickDistance *= 3f;
+        }
         speed = speedRate * joystickDistance;
         rb.velocity = direction * speed * Time.fixedDeltaTime;
     }

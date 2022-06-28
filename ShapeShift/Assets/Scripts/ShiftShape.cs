@@ -8,7 +8,7 @@ public class ShiftShape : MonoBehaviour
     private int shapesNum = 2;
 
     public int CurrentShape {get {return currentShape;}}
-    public int ShapesNum {set {shapesNum += value; Debug.Log(shapesNum);}}
+    public int ShapesNum {set {shapesNum += value;}}
 
     void Update()
     {
