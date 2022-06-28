@@ -24,13 +24,19 @@ public class Joystick : MonoBehaviour
         joystickVector = Vector2.zero;
 
         joysstickOrigPos = joystickOuter.transform.position;
-        joystickRad = joystickOuter.GetComponent<RectTransform>().sizeDelta.y / 4;
+        joystickRad = joystickOuter.GetComponent<RectTransform>().sizeDelta.y / 4 + 70;
     }
 
     void Update()
     {
-        if(joystickVector != Vector2.zero)
-        shapeMovement.MoveShape(joystickVector, joystickMag);
+        if(joystickOuter.transform.position.x != joysstickOrigPos.x && joystickOuter.transform.position.y != joysstickOrigPos.y)
+        {
+            shapeMovement.MoveShape(joystickVector, joystickMag);
+        }
+        else
+        {
+            shapeMovement.StopShape(joystickVector);
+        }
     }
 
     public void PointerDown()
