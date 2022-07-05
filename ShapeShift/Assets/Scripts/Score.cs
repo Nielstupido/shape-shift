@@ -1,16 +1,18 @@
 using UnityEngine;
-using TMPro;
+using UnityEngine.UI;
 
 public class Score : MonoBehaviour
 {
-    private static TextMeshProUGUI scoreText;
+    private static Text scoreText;
     public GameObject textPrefab;
     private static GameObject textPrefab2;
     private static int addedPoints = 1;
 
+    public string ScoreT {get{return scoreText.text;}}
+
     void Start()
     {
-        scoreText = GetComponent<TextMeshProUGUI>();
+        scoreText = GetComponent<Text>();
         textPrefab2 = textPrefab;
     }
 

@@ -6,6 +6,7 @@ public class PlayerHit : MonoBehaviour
     private PlayerStats playerStats;
     private ShiftShape shiftShape;
     private CamShake camShake;
+    private FlickerLights flickerLights;
     private int enemyShapeNum;
 
     public int EnemyShapeNum { set{enemyShapeNum = value;} }
@@ -15,6 +16,7 @@ public class PlayerHit : MonoBehaviour
         playerStats = FindObjectOfType<PlayerStats>();
         shiftShape = FindObjectOfType<ShiftShape>();
         camShake = FindObjectOfType<CamShake>();
+        flickerLights = FindObjectOfType<FlickerLights>();
     } 
 
     void OnCollisionEnter2D(Collision2D collider)
@@ -32,6 +34,7 @@ public class PlayerHit : MonoBehaviour
                 GetComponent<SpriteRenderer>().enabled = false;
 
                 explosion.Play();
+                StartCoroutine(flickerLights.FlickIntensity());
 
                 playerStats.Health -= 10;
                 camShake.TriggerShake();

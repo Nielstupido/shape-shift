@@ -4,12 +4,16 @@ public class ShapeMovement : MonoBehaviour
 {
     private float speedRate = 1f;
     private float speed;
+    private bool isGamePaused = false;
     private Rigidbody2D rb;
     private Rect cameraRect;
     private Camera cam;
 
     void Start()
     {
+        GameObserver.OnGameContinue += ContinueGame;
+        GameObserver.OnGamePaused += PauseGame;
+
         cam = Camera.main;
         var bottomLeft = cam.ScreenToWorldPoint(Vector3.zero);
         var topRight = cam.ScreenToWorldPoint(new Vector3(cam.pixelWidth, cam.pixelHeight));
@@ -23,6 +27,12 @@ public class ShapeMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
+    void OnDisable()
+    {
+        GameObserver.OnGameContinue -= ContinueGame;
+        GameObserver.OnGamePaused -= PauseGame;
+    }
+
     void Update()
     {
         transform.position = new Vector3(
@@ -33,36 +43,61 @@ public class ShapeMovement : MonoBehaviour
 
     public void MoveShape(Vector2 direction, float joystickDistance)
     {
-        if(joystickDistance > 135)
+        if(!isGamePaused)
         {
-            speedRate = 2.5f;
+            if(joystickDistance > 135)
+            {
+                speedRate = 2.5f;
+            }
+            else
+            {
+                speedRate = 2f;
+            }
+            speed = speedRate * joystickDistance;
         }
         else
         {
-            speedRate = 2f;
+            speed = 0;   
         }
-        speed = speedRate * joystickDistance;
+
         rb.velocity = direction * speed * Time.fixedDeltaTime;
     }
 
     public void StopShape(Vector2 direction)
     {
-        if(speed < 1)
+        if(!isGamePaused)
         {
-            return;
-        }
-        else if(speed > 150)
-        {
-            speed -= 10f;
-        }
-        else if(speed > 100)
-        {
-            speed -= 5f;
+            if(speed < 1)
+            {
+                return;
+            }
+            else if(speed > 150)
+            {
+                speed -= 10f;
+            }
+            else if(speed > 100)
+            {
+                speed -= 5f;
+            }
+            else
+            {
+                speed -= 2f;
+            }
+            rb.velocity = direction * speed * Time.fixedDeltaTime;
         }
         else
         {
-            speed -= 2f;
+            rb.velocity = direction * 0 * Time.fixedDeltaTime;
         }
-        rb.velocity = direction * speed * Time.fixedDeltaTime;
+    }
+
+    void PauseGame()
+    {
+        isGamePaused = true;
+    }
+
+    void ContinueGame()
+    {
+        isGamePaused = false;
     }
 }

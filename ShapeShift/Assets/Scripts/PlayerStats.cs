@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
-    private GameOver gameOver;
     private PlayerHealth playerHealth;
+    private GameOver gameOver;
     private int health = 100;
 
     void Start()

@@ -7,12 +7,18 @@ public class ShapeAdd : MonoBehaviour
     private ShiftShape shiftShape;
     private EnemySpawner enemySpawner;
     private int counter, counterBreakpoint, shapesAdded, shapeBannerTimer;
+    private int counterT, counterBreakpointT, shapesAddedT, shapeBannerTimerT;
     private bool isAddingShapesDone;
+    private bool isGamePaused;
 
     void Start()
     {
+        GameObserver.OnGameContinue += ContinueGame;
+        GameObserver.OnGamePaused += PauseGame;
+
         shiftShape = FindObjectOfType<ShiftShape>();
         enemySpawner = FindObjectOfType<EnemySpawner>();
+        isGamePaused = false;
         counter = 0;
         shapesAdded = 0;
         counterBreakpoint = 30;
@@ -21,11 +27,20 @@ public class ShapeAdd : MonoBehaviour
         StartCoroutine("CountdownAddingShape");
     }
 
+    void OnDisable()
+    {
+        GameObserver.OnGameContinue -= ContinueGame;
+        GameObserver.OnGamePaused -= PauseGame;  
+    }
+
     void ShowNewAddedShape()
     {
-        text.SetActive(true);
-        shiftShape.ShapesNum = 1;
-        enemySpawner.MaxAvailEnemyShapes = 1;
+        if(!isGamePaused)
+        {
+            text.SetActive(true);
+            shiftShape.ShapesNum = 1;
+            enemySpawner.MaxAvailEnemyShapes = 1;
+        }
     }
 
     IEnumerator CountdownAddingShape()
@@ -62,11 +77,28 @@ public class ShapeAdd : MonoBehaviour
                 counter = 0;
                 shapesAdded++;
             }
-
             counter++;
 
             yield return new WaitForSeconds(0.5f);
         }
         
+    }
+
+    void PauseGame()
+    {
+        shapeBannerTimerT = shapeBannerTimer;
+        counterT = counter;
+        counterBreakpointT = counterBreakpoint;
+        shapesAddedT = shapesAdded;
+        isGamePaused = true;
+    }
+
+    void ContinueGame()
+    {
+        shapeBannerTimer = shapeBannerTimerT;
+        counter = counterT;
+        counterBreakpoint = counterBreakpointT;
+        shapesAdded = shapesAddedT;
+        isGamePaused = false;
     }
 }

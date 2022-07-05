@@ -5,6 +5,8 @@ public class Joystick : MonoBehaviour
 {
     [SerializeField]private GameObject joystickInner;
     [SerializeField]private GameObject joystickOuter;
+    [SerializeField]private GameObject joystickCover;
+
     private ShapeMovement shapeMovement;
     private Vector2 joystickVector;
     private Vector2 joystickTouchPos;
@@ -20,11 +22,20 @@ public class Joystick : MonoBehaviour
 
     void Start()
     {
+        GameObserver.OnGameContinue += ContinueGame;
+        GameObserver.OnGamePaused += PauseGame;
+
         shapeMovement = FindObjectOfType<ShapeMovement>();
         joystickVector = Vector2.zero;
 
         joysstickOrigPos = joystickOuter.transform.position;
         joystickRad = joystickOuter.GetComponent<RectTransform>().sizeDelta.y / 4 + 70;
+    }
+
+    void OnDisable()
+    {
+        GameObserver.OnGameContinue -= ContinueGame;
+        GameObserver.OnGamePaused -= PauseGame;
     }
 
     void Update()
@@ -71,5 +82,15 @@ public class Joystick : MonoBehaviour
     {
         joystickInner.transform.position = joysstickOrigPos;
         joystickOuter.transform.position = joysstickOrigPos;
+    }
+
+    void PauseGame()
+    {
+        joystickCover.SetActive(true);
+    }
+
+    void ContinueGame()
+    {
+        joystickCover.SetActive(false);
     }
 }
